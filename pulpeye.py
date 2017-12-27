@@ -55,16 +55,56 @@ packet_string = """
 }
 """
 
-packet_json = json.loads(packet_string)
-samples = packet_json['samples']
-meta = packet_json['meta']
+packet_string_new = """
+{
+    "meta":{
+        "packet_time": "2017-12-22 9:05:26",
+        "host": "Null",
+        "records": 0,
+        "command" : 0,
+        "show_meta" : 1,
+        "show_raw" : 0,
+        "log" : "empty",
+        "extra_lines" : 15
+        },
+    "samples": 
+         {
+            "name": "sample1",
+            "SamplePoint": 1,
+            "sampletime": "2017-12-22 8:05:26",
+            "batchID": 0,
+            "csf": 0,
+            "fl": 0,
+            "shives_sum": 0
+         }    
+}
+"""
 
-now = datetime.now()
+packet_json_new = json.loads(packet_string_new)
+samples = packet_json_new['samples']
+meta = packet_json_new['meta']
+meta['host'] = hostname
+
+def new_packet():
+    out = {}
+    out['meta'] = meta
+    out['samples'] = samples
+    out['log'] = "Empty log..."
+    new_json_out = json.dumps(out, indent=2).encode(encoding='utf-8')
+    return new_json_out
+
+
+
+
 
 class pulpeye():
+    out = {}
+    out2 = {}
     def __init__(self):
-        sql_ip = '192.168.2.205'
-        meta['host'] = hostname
+        self.packet_json_new = json.loads(packet_string_new)
+        self.samples = self.packet_json_new['samples']
+        self.meta = self.packet_json_new['meta']
+        self.meta['host'] = hostname
 
     def connect_pulpeye(self):
         pass
@@ -75,6 +115,16 @@ class pulpeye():
     def add_sample(self):
         pass
 
+    def new_packet(self):
+        now = datetime.now()
+        self.meta['packet_time'] = now.strftime('%Y-%m-%d %H:%M:%S')
+        self.out['log'] = "Empty log...   Hey Brother... "
+        self.out['meta'] = meta
+        self.out['samples'] = samples
+        self.out['log'] = "Hey Brother.."
+        # return self.out
+
+
     def build_packet(self):
         pass
 
@@ -82,3 +132,10 @@ class pulpeye():
         pass
 
 
+print(packet_json_new)
+pe = pulpeye()
+
+print("test\n", pe.out)
+time.sleep(1)
+# pe.new_packet()
+print("test2\n", pe.out)
